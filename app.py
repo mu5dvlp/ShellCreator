@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 import subprocess
 import os
 import re
@@ -32,7 +33,9 @@ def is_valid_filename(filename):
 def create_shell_command_file():
     fileName = entry_fileName.get()
     if not is_valid_filename(fileName):
-        print("ファイル名が無効です")
+        message = "ファイル名が無効です。"
+        label_create_result.config(text=message,fg="red")
+        print(message)
         return
     
     # コマンド用のディレクトリがなければ作成
@@ -42,13 +45,17 @@ def create_shell_command_file():
     # 実行ファイルの既存確認
     filePath = f'{config.COMMAND_FILE_ROOT_PATH}/{fileName}'
     if os.path.exists(filePath):
-        print(f"{filePath} は既に存在します。")
+        message = f"{filePath} は既に存在します。"
+        label_create_result.config(text=message,fg="red")
+        print(message)
         return
 
     with open(filePath,'w') as f:
         code = "#!/bin/sh\n"
         code+=text_code.get("1.0", tk.END)
         f.write(code)
+    message="作成完了"
+    label_create_result.config(text=message,fg="green")
     
     subprocess.run(["chmod","755",filePath], capture_output=True, text=True)
     print(is_enable_open_editor)
@@ -62,7 +69,7 @@ def open_command_directory_with_finder():
 # //ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 root = tk.Tk()
 root.title("Shell Creator")
-root.geometry("500x500")
+root.geometry("500x550")
 
 # //〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
 # ファイル名
@@ -87,9 +94,14 @@ checkbutton_create = tk.Checkbutton(frame_code, text="VSCodeを開く", variable
 checkbutton_create.pack()
 button_create = tk.Button(frame_code, text="作成",command=create_shell_command_file)
 button_create.pack()
+label_create_result = tk.Label(frame_code, text="")
+label_create_result.pack()
+
+separator = ttk.Separator(root, orient='horizontal')
+separator.pack(fill='x')
 
 button_create = tk.Button(root, text="Reveal in Finder",command=open_command_directory_with_finder)
-button_create.pack()
+button_create.pack(pady=10)
 
 # //〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
 root.mainloop()

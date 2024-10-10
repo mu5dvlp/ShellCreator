@@ -36,9 +36,14 @@ def create_shell_command_file():
         print("ファイル名が無効です")
         return
     
+    # コマンド用のディレクトリがなければ作成
+    if not os.path.exists(config.COMMAND_FILE_ROOT_PATH):
+        os.makedirs(config.COMMAND_FILE_ROOT_PATH)
+
+    # 実行ファイルの既存確認
     filePath = f'{config.COMMAND_FILE_ROOT_PATH}/{fileName}'
     if os.path.exists(filePath):
-        print(f"{filePath} はすでに存在します。")
+        print(f"{filePath} は既に存在します。")
         return
 
     with open(filePath,'w') as f:

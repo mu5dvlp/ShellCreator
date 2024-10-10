@@ -5,7 +5,6 @@ import re
 import platform
 
 import config
-import dataManager
 
 # //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 def is_valid_filename(filename):
@@ -27,7 +26,7 @@ def is_valid_filename(filename):
             return False
 
     max_length = 255
-    return 0<len(filename)<=255
+    return 0<len(filename)<=max_length
 
 # //〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜
 def create_shell_command_file():
